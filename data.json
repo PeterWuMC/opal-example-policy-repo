@@ -3,7 +3,7 @@
     "us_partner": [
       {
         "path": "/api/v9/ping",
-        "action": ["GET", "POST}"]
+        "action": ["GET", "POST"]
       }
     ],
     "us_partner_create_only": [
