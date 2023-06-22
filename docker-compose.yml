@@ -6,18 +6,20 @@ services:
   # At the moment, the broadcast channel can be either: postgresdb, redis or kafka.
   # The format of the broadcaster URI string (the one we pass to opal server as `OPAL_BROADCAST_URI`) is specified here:
   # https://github.com/encode/broadcaster#available-backends
-  broadcast_channel:
-    image: postgres:alpine
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+  # broadcast_channel:
+  #   image: postgres:alpine
+  #   environment:
+  #     - POSTGRES_DB=postgres
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
   opal_server:
     # by default we run opal-server from latest official image
     image: permitio/opal-server:latest
     environment:
       # the broadcast backbone uri used by opal server workers (see comments above for: broadcast_channel)
-      - OPAL_BROADCAST_URI=postgres://postgres:postgres@broadcast_channel:5432/postgres
+      # - OPAL_BROADCAST_URI=postgres://postgres:postgres@broadcast_channel:5432/postgres
+      # - OPAL_BROADCAST_URI=redis://redis:6379
+      - OPAL_BROADCAST_URI=redis://host.docker.internal:6379
       # number of uvicorn workers to run inside the opal-server container
       - UVICORN_NUM_WORKERS=4
       # the git repo hosting our policy
@@ -37,8 +39,8 @@ services:
     ports:
       # exposes opal server on the host machine, you can access the server at: http://localhost:7002
       - "7002:7002"
-    depends_on:
-      - broadcast_channel
+    # depends_on:
+      # - broadcast_channel
   opal_client:
     # by default we run opal-client from latest official image
     image: permitio/opal-client:latest
